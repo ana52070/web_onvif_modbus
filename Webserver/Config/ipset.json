@@ -1,0 +1,74 @@
+{
+  "network": {
+    "ipa": 192,
+    "ipb": 168,
+    "ipc": 1,
+    "ipd": 3,
+    "maska": 255,
+    "maskb": 255,
+    "maskc": 255,
+    "maskd": 0,
+    "gwa": 192,
+    "gwb": 168,
+    "gwc": 1,
+    "gwd": 1,
+    "remoipa": 192,
+    "remoipb": 168,
+    "remoipc": 1,
+    "remoipd": 233
+  },
+  "plc": {
+    "addr": 1,
+    "funum": 3,
+    "stareg": 1,
+    "numbr": 1,
+    "remoteport": 502
+  },
+  "cameras": [
+    {
+      "ipa": 192,
+      "ipb": 168,
+      "ipc": 1,
+      "ipd": 3,
+      "port": 80,
+      "user": "0",
+      "pwd": "0"
+    },
+    {
+      "ipa": 192,
+      "ipb": 168,
+      "ipc": 1,
+      "ipd": 3,
+      "port": 80,
+      "user": "0",
+      "pwd": "0"
+    },
+    {
+      "ipa": 192,
+      "ipb": 168,
+      "ipc": 1,
+      "ipd": 3,
+      "port": 80,
+      "user": "0",
+      "pwd": "0"
+    },
+    {
+      "ipa": 192,
+      "ipb": 168,
+      "ipc": 1,
+      "ipd": 3,
+      "port": 80,
+      "user": "0",
+      "pwd": "0"
+    },
+    {
+      "ipa": 192,
+      "ipb": 168,
+      "ipc": 1,
+      "ipd": 3,
+      "port": 80,
+      "user": "0",
+      "pwd": "0"
+    }
+  ]
+}

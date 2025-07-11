@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "html_base.h": "c",
+        "html_main.h": "c",
+        "html_config.h": "c",
+        "html_tool.h": "c",
+        "mtptz.h": "c",
+        "*.nsmap": "c",
+        "cjson.h": "c",
+        "camera_manager.h": "c",
+        "myptz.h": "c",
+        "command.h": "c",
+        "camera_config.h": "c",
+        "wsseapi.h": "c"
+    }
+}

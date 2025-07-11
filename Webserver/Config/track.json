@@ -1,0 +1,16 @@
+{
+  "plc": {
+    "raiseh": 1,
+    "carframe": 2,
+    "dirver": 3,
+    "carSed": 4,
+    "raiSped": 5,
+    "Data_unit": 0,
+    "Data_refer": 0
+  },
+  "track": {
+    "H_install": 0.0,
+    "H_change": 0.0,
+    "preset_num": 45
+  }
+}

@@ -1,0 +1,736 @@
+<!DOCTYPE HTML><html><head>
+	<meta name=renderer content=ie-comp>	
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta http-equiv=X-UA-Compatible content="IE=11">
+<title>相机控制</title>
+
+<style type="text/css">
+    body{font-family:Arial,sans-serif;margin:0;padding:0;background-color:#f4f4f4;color:#333}
+    .container{width:95%;max-width:1200px;margin:30px auto 0;background-color:#fff;padding:20px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
+    h2 {
+        text-align: center;
+        color: #333;
+        font-size: 24px;
+    }
+    hr {
+        border: 0;
+        height: 2px;
+        background-color: #ccc;
+    }
+    table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+    table, th, td {
+        border: 1px solid #ddd;
+    }
+    th, td {
+        padding: 10px;
+        text-align: center;
+    }
+    th {
+        background-color: #f4f4f4;
+    }
+    form {
+        margin-bottom: 20px;
+    }
+    .form-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    .form-row label {
+        width: 100px;
+        text-align: right;
+        margin-right: 10px;
+        font-weight: bold;
+        color: #555;
+    }
+
+	.form-count {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    .form-count label {
+        width: 130px;
+        text-align: right;
+        margin-right: 10px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    input[type="text"], input[type="number"], input[type="file"] {
+        flex: 1;
+        padding: 8px;
+        margin: 5px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    input[type="text"]:focus, input[type="number"]:focus, input[type="file"]:focus {
+        border-color: #5cb85c;
+        box-shadow: 0 0 5px rgba(92, 184, 92, 0.5);
+        outline: none;
+    }
+    input[type="text"]:hover, input[type="number"]:hover, input[type="file"]:hover {
+        border-color: #5cb85c;
+    }
+    input[type="submit"]{width:100px;padding:10px;margin:5px 0;border:none;border-radius:4px;background-color:#5cb85c;color:white;cursor:pointer;transition:background-color 0.3s ease}
+    input[type="submit"]:hover{background-color:#4cae4c}
+    .footmsg {
+        text-align: center;
+        margin-top: 50px;
+        color: #777;
+    }
+    .STYLE1 {
+        color: white;
+        font-size: 18px;
+    }
+    .STYLE6 {
+        font-size: 16px;
+    }
+    .center-button {
+        text-align: center;
+    }
+    .ip-input {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .ip-input input {
+        width: 100%;
+        max-width: 70px;
+        text-align: center;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        box-sizing: border-box;
+    }
+    .ip-input input:focus {
+        border-color: #5cb85c;
+        box-shadow: 0 0 5px rgba(92, 184, 92, 0.5);
+        outline: none;
+    }
+    .ip-input input:hover {
+        border-color: #5cb85c;
+    }
+
+	.plc-input {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .plc-input input {
+        width: 100%;
+        max-width: 80px;
+        text-align: center;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        box-sizing: border-box;
+    }
+    .plc-input input:focus {
+        border-color: #5cb85c;
+        box-shadow: 0 0 5px rgba(92, 184, 92, 0.5);
+        outline: none;
+    }
+    .plc-input input:hover {
+        border-color: #5cb85c;
+    }
+
+
+    .cam-input {    
+        width: 100%;
+        max-width: 300px;
+        padding: 8px;
+        margin: 5px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        box-sizing: border-box;
+    }
+    input.cam-input {
+        flex: none !important;
+    }
+
+    @media (max-width: 768px) {
+        .form-row, .form-count {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .form-row label, .form-count label {
+            width: auto;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+        .ip-input, .plc-input {
+            width: 100%;
+        }
+        .center-button input[type="submit"], 
+        .center-button input[type="button"] {
+            width: 80%;
+            margin: 5px 0;
+        }
+    }
+</style>
+
+<script type="text/javascript">
+	function upValue(){
+		var de_value = ["1","2","3","4","5","0","-40","80","30","0","1","1","80","35","0","1","3","80","1","1"];
+		for (var i = 0; i < de_value.length; i++) {
+						document.getElementById("input" + (i+1)).value = de_value[i];
+					}
+	}
+
+
+    var currentCameraCount = 1; // 全局变量保存当前相机数量
+
+    function myFun() {
+    const xmlhttp = window.XMLHttpRequest ? new XMLHttpRequest() : null;
+    if (!xmlhttp) {
+        alert('no_XMLHttpRequest');
+        return;
+    }
+
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === 4) {
+            if (xmlhttp.status === 200) {
+                try {
+                    const data = JSON.parse(xmlhttp.response);
+                    
+                    // 处理网络参数
+                    if (data.network) {
+                        document.getElementById('ipa').value = data.network.ipa;
+                        document.getElementById('ipb').value = data.network.ipb;
+                        document.getElementById('ipc').value = data.network.ipc;
+                        document.getElementById('ipd').value = data.network.ipd;
+                        document.getElementById('maska').value = data.network.maska;
+                        document.getElementById('maskb').value = data.network.maskb;
+                        document.getElementById('maskc').value = data.network.maskc;
+                        document.getElementById('maskd').value = data.network.maskd;
+                        document.getElementById('gwa').value = data.network.gwa;
+                        document.getElementById('gwb').value = data.network.gwb;
+                        document.getElementById('gwc').value = data.network.gwc;
+                        document.getElementById('gwd').value = data.network.gwd;
+                        document.getElementById('remoipa').value = data.network.remoipa;
+                        document.getElementById('remoipb').value = data.network.remoipb;
+                        document.getElementById('remoipc').value = data.network.remoipc;
+                        document.getElementById('remoipd').value = data.network.remoipd;
+                    }
+
+                    // 处理PLC参数
+                    if (data.plc) {
+                        document.getElementById('PLCaddr').value = data.plc.addr;
+                        document.getElementById('stareg').value = data.plc.stareg;
+                        document.getElementById('numbr').value = data.plc.numbr;
+                        document.getElementById('input17').value = data.plc.remoteport;
+                        
+                        // 设置功能码选择框
+                        const funumSelect = document.getElementById('funum');
+                        if (funumSelect) {
+                            for (let i = 0; i < funumSelect.options.length; i++) {
+                                if (funumSelect.options[i].value == data.plc.funum) {
+                                    funumSelect.selectedIndex = i;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    // 处理相机参数
+                    if (data.cameras && data.cameras.length > 0) {
+                        for (let i = 0; i < data.cameras.length; i++) {
+                            const cam = data.cameras[i];
+                            const idx = i + 1;
+                            document.getElementById(`cam_ipa${idx}`).value = cam.ipa;
+                            document.getElementById(`cam_ipb${idx}`).value = cam.ipb;
+                            document.getElementById(`cam_ipc${idx}`).value = cam.ipc;
+                            document.getElementById(`cam_ipd${idx}`).value = cam.ipd;
+                            document.getElementById(`cam_port${idx}`).value = cam.port;
+                            document.getElementById(`cam_user${idx}`).value = cam.user;
+                            document.getElementById(`cam_pwd${idx}`).value = cam.pwd;
+                        }
+                    }
+
+                    // 处理相机数量
+                    if (data.camera_count) {
+                        document.getElementById('camera_count').value = data.camera_count;
+                        currentCameraCount = parseInt(data.camera_count);
+                    }
+
+                } catch (error) {
+                    console.error('解析JSON数据时出错:', error);
+                    alert('解析配置文件时发生错误');
+                }
+            } else {
+                console.error('请求失败，状态码:', xmlhttp.status);
+                alert('获取网络配置失败，状态码: ' + xmlhttp.status);
+            }
+        }
+    };
+
+    xmlhttp.open("GET", "/ipset.json", true);
+    xmlhttp.send();
+    }
+	
+	function validateInput(input) {
+		var value = input.value.trim();  
+		if (value === '') {
+		} else {
+			if (!/^\d+$/.test(value)) {		
+				input.value = '';
+				alert("请输入有效数字");
+				return;
+			}
+			var numberValue = parseFloat(value);
+	
+			if (numberValue < input.min) {
+				input.value = input.min;
+				alert("当前值 < "+input.min+"\n请输入正确数据");
+			} else if (numberValue > input.max) {
+				input.value = input.max;
+				alert("当前值 > "+input.max+ "\n请输入正确数据");
+			}
+		}
+	}
+
+	function validateForm() {
+		var inputs = document.querySelectorAll('input');
+		for (var i = 0; i < document.querySelectorAll('input').length; i++) {
+			if (inputs[i].value === '') {
+				alert('输入为空或有误');
+				return false; 
+			}
+		}
+		return true;
+	}
+
+    // 初始化时加载数据
+    window.addEventListener('DOMContentLoaded',function(){myFun()});
+    function validateForm(){
+        var count = parseInt(document.getElementById('camera_count').value);
+        var isValid = true;
+        
+        // 确保相机数量值有效
+        if (isNaN(count) || count < 1 || count > 5) {
+            alert('请选择有效的相机数量(1-5)');
+            return false;
+        }
+        
+        // 先处理所有相机参数(1-5)，设置空值为0
+        for (var i = 1; i <= 5; i++) {
+            var inputs = [
+                document.getElementById('cam_ipa' + i),
+                document.getElementById('cam_ipb' + i),
+                document.getElementById('cam_ipc' + i),
+                document.getElementById('cam_ipd' + i),
+                document.getElementById('cam_port' + i),
+                document.getElementById('cam_user' + i),
+                document.getElementById('cam_pwd' + i)
+            ];
+            
+            for (var j = 0; j < inputs.length; j++) {
+                if (!inputs[j]) continue;
+                
+                // 设置空值为1
+                if (inputs[j].value === '') {
+                    if (inputs[j].type === 'number') {
+                        inputs[j].value = '1';
+                    } else if (inputs[j].type === 'text' || inputs[j].type === 'password') {
+                        inputs[j].value = '1';
+                    }
+                }
+            }
+        }
+        
+        // 然后验证当前显示的相机参数
+        for (var i = 1; i <= count; i++) {
+            var inputs = [
+                document.getElementById('cam_ipa' + i),
+                document.getElementById('cam_ipb' + i),
+                document.getElementById('cam_ipc' + i),
+                document.getElementById('cam_ipd' + i),
+                document.getElementById('cam_port' + i),
+                document.getElementById('cam_user' + i),
+                document.getElementById('cam_pwd' + i)
+            ];
+            
+            for (var j = 0; j < inputs.length; j++) {
+                if (!inputs[j]) continue;
+                
+                // 验证必填
+                if (inputs[j].value === '') {
+                    alert('相机' + i + '参数不完整');
+                    isValid = false;
+                    break;
+                }
+            }
+            if (!isValid) break;
+        }
+        return isValid;
+    }
+
+    function checkCameraSelection(form) {
+        var checkboxes = form.querySelectorAll('input[type="checkbox"][name^="cam"]');
+        
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                var camNum = parseInt(checkboxes[i].name.replace('cam', ''));
+                if (camNum > currentCameraCount) {
+                    alert('选择的相机' + camNum + '超过了设置的相机数量(' + currentCameraCount + ')');
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    function validateCameraSelection(form) {
+        // 确保所有5个相机参数都会被处理
+        for (var i = 1; i <= 5; i++) {
+            var checkbox = form.querySelector('input[type="checkbox"][name="cam' + i + '"]');
+            // 先移除可能存在的同名隐藏input
+            var existingHidden = form.querySelector('input[type="hidden"][name="cam' + i + '"]');
+            if (existingHidden) {
+                form.removeChild(existingHidden);
+            }
+            
+            if (!checkbox) {
+                // 如果不存在则创建隐藏input
+                var hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'cam' + i;
+                hiddenInput.value = '0';
+                form.appendChild(hiddenInput);
+            } else {
+                // 确保提交正确的值
+                if (checkbox.checked) {
+                    checkbox.value = '1';
+                } else {
+                    // 创建隐藏input提交0值
+                    var hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = 'cam' + i;
+                    hiddenInput.value = '0';
+                    form.appendChild(hiddenInput);
+                }
+            }
+        }
+        return true;
+    }
+
+    function redirectAfterSubmit() {
+        if (validateForm()) {
+            setTimeout(function () {
+                window.location.reload();
+            }, 3000);
+            return true;
+        }
+        return false;
+    }
+
+</script>
+<noscript>
+	需要启用JavaScript才能继续运行。
+ </noscript> 
+</head>
+
+<body>
+<div class="container">
+
+    <h2><strong>&nbsp;&nbsp;相机控制参数配置及调试&nbsp;&nbsp;</strong></h2>
+    <hr>
+    <table>
+        <tr>
+            <td style="font-weight: bold;font-family: Verdana; background-color: rgb(51, 51, 255); text-align: center;"><small><a href="./ipset.html" class="STYLE1">网络参数</a></small></td>
+            <td style="font-weight: bold;font-family: Verdana; background-color: rgb(128, 128, 128); text-align: center;"><span class="STYLE6"><small><a href="./track.html"><span style="color: white;">自动跟踪参数</span></a></small></span></td>
+        </tr>
+    </table>
+
+
+<h3><strong>&nbsp;&nbsp;网络参数</strong></h3>
+<form action="/ipcfg.cgi" method="get" onsubmit='return confirm("是否选择提交?（提交后会重启）")'>
+	<div class="form-row">
+		<label>&nbsp;&nbsp;本地地址</label>
+		<div class="ip-input">
+			<input name="ipa" type="number" id="ipa" value="192" min="1" max="233" step="1" maxlength="3" placeholder="1~233" oninput="validateInput(this)">
+			<span>.</span>
+			<input name="ipb" type="number" id="ipb" value="168" min="0" max="255" step="1" maxlength="3" placeholder="0~255" oninput="validateInput(this)">
+			<span>.</span>
+			<input name="ipc" type="number" id="ipc" value="1" min="0" max="255" step="1" maxlength="3" placeholder="0~255" oninput="validateInput(this)">
+			<span>.</span>
+			<input name="ipd" type="number" id="ipd" value="3" min="0" max="255" step="1" maxlength="3" placeholder="0~255" oninput="validateInput(this)">
+		</div>
+	</div>
+
+	<div class="form-row">
+		<label>&nbsp;&nbsp;子网掩码</label>
+		<div class="ip-input">
+			<input name="maska" type="number" id="maska" value="255" min="0" max="255" step="1" maxlength="3" placeholder="0~255" oninput="validateInput(this)">
+			<span>.</span>
+			<input name="maskb" type="number" id="maskb" value="255" min="0" max="255" step="1" maxlength="3" placeholder="0~255" oninput="validateInput(this)">
+			<span>.</span>
+			<input name="maskc" type="number" id="maskc" value="255" min="0" max="255" step="1" maxlength="3" placeholder="0~255" oninput="validateInput(this)">
+			<span>.</span>
+			<input name="maskd" type="number" id="maskd" value="0" min="0" max="255" step="1" maxlength="3" placeholder="0~255" oninput="validateInput(this)">
+		</div>
+	</div>
+
+	<div class="form-row">
+		<label>&nbsp;&nbsp;网关地址</label>
+		<div class="ip-input">
+			<input name="gwa" type="number" id="gwa" value="192" min="1" max="233" step="1" maxlength="3" placeholder="1~233" oninput="validateInput(this)">
+			<span>.</span>
+			<input name="gwb" type="number" id="gwb" value="168" min="0" max="255" step="1" maxlength="3" placeholder="0~255" oninput="validateInput(this)">
+			<span>.</span>
+			<input name="gwc" type="number" id="gwc" value="1" min="0" max="255" step="1" maxlength="3" placeholder="0~255" oninput="validateInput(this)">
+			<span>.</span>
+			<input name="gwd" type="number" id="gwd" value="1" min="0" max="255" step="1" maxlength="3" placeholder="0~255" oninput="validateInput(this)">
+		</div>
+	</div>
+
+    <div class="form-row">
+		<label>&nbsp;&nbsp;远端地址</label>
+		<div class="ip-input">
+			<input name="remoipa" type="number" id="remoipa" value="192" min="1" max="233" step="1" maxlength="3" placeholder="1~233" oninput="validateInput(this)">
+			<span>.</span>
+			<input name="remoipb" type="number" id="remoipb" value="168" min="0" max="255" step="1" maxlength="3" placeholder="0~255" oninput="validateInput(this)">
+			<span>.</span>
+			<input name="remoipc" type="number" id="remoipc" value="1" min="0" max="255" step="1" maxlength="3" placeholder="0~255" oninput="validateInput(this)">
+			<span>.</span>
+			<input name="remoipd" type="number" id="remoipd" value="233" min="0" max="255" step="1" maxlength="3" placeholder="0~255" oninput="validateInput(this)">
+		</div>
+	</div>
+
+
+    <hr>
+<h3><strong>&nbsp;&nbsp;与PLC通信配置参数</strong></h3>
+<div class="form-count">
+	<label>&nbsp;&nbsp;PLC从机地址</label>
+	<div class="plc-input">
+		<input title="1~255" type="number" id="PLCaddr" min="1" max="255" step="1"  name="PLCaddr" value="1" maxlength="20"  oninput="validateInput(this)">
+	</div>
+</div>
+
+
+<div class="form-count">
+	<label>&nbsp;&nbsp;PLC功能码</label>
+	<div class="plc-input">
+			<select size="1" id="funum" title="03:read  04:write" style="width:90px;height: 25px;" name="funum">
+				<option value="3" selected>3</option>
+				<option value="4">4</option>
+			</select>
+	</div>
+</div>
+
+<div class="form-count">
+	<label>&nbsp;&nbsp;PLC寄存器起始</label>
+	<div class="plc-input">
+		<input title="0~65000"  type="number" id="stareg" min="0" max="65000" step="1"  name="stareg" value="1" maxlength="5"  oninput="validateInput(this)">
+	</div>
+</div>
+<div class="form-count">
+	<label>&nbsp;&nbsp;PLC寄存器个数</label>
+	<div class="plc-input">
+			 <input title="1~9"  type="number" id="numbr" min="1" max="10" step="1" name="numbr" value="1" maxlength="1"  oninput="validateInput(this)">
+			</div>
+		</div>
+	<div class="form-count">
+		<label>&nbsp;&nbsp;远端端口</label>
+		<div class="plc-input">
+		<input name="remoteport" type="number" id="input17" min="1" max="65535" step="1" value="502" 
+       maxlength="5" placeholder="1~65535" oninput="validateInput(this)">	
+		</div>
+	</div>
+
+
+
+    <hr>
+    <h3><strong>&nbsp;&nbsp;被控相机相关参数</strong></h3>
+    <div class="form-count">
+        <label>&nbsp;&nbsp;相机数量</label>
+        <div class="form-row">
+            <select name="camera_count" id="camera_count" style="width:90px;height: 25px;">
+                <option value="1" selected>1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="camera_groups"></div>
+
+    <script>
+    function generateCameraGroups() {
+        const container = document.getElementById('camera_groups');
+        let html = '';
+        
+        for (let i = 1; i <= 5; i++) {
+            html += `
+            <div id="camera_group_${i}">
+                <div class="form-row">
+                    <div class="form-row">
+                        <label>&nbsp;&nbsp;相机${i}地址</label>
+                        <div class="ip-input">
+                            <input name="cam_ipa${i}" type="number" id="cam_ipa${i}" value="192" min="1" max="233" step="1" maxlength="3" placeholder="1~233" oninput="validateInput(this)">
+                            <span>.</span>
+                            <input name="cam_ipb${i}" type="number" id="cam_ipb${i}" value="168" min="0" max="255" step="1" maxlength="3" placeholder="0~255" oninput="validateInput(this)">
+                            <span>.</span>
+                            <input name="cam_ipc${i}" type="number" id="cam_ipc${i}" value="1" min="0" max="255" step="1" maxlength="3" placeholder="0~255" oninput="validateInput(this)">
+                            <span>.</span>
+                            <input name="cam_ipd${i}" type="number" id="cam_ipd${i}" value="3" min="0" max="255" step="1" maxlength="3" placeholder="0~255" oninput="validateInput(this)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label>&nbsp;&nbsp;相机${i}端口</label>
+                    <div class="plc-input">
+                    <input name="cam_port${i}" type="number" id="cam_port${i}" min="1" max="65535" step="1" value="80" 
+                   maxlength="5" placeholder="1~65535" oninput="validateInput(this)">	
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label>&nbsp;&nbsp;相机${i}用户名</label>
+                    <input type="text" name="cam_user${i}" id="cam_user${i}" class="cam-input" placeholder="用户名" maxlength="10" value="0">
+                </div>
+                
+                <div class="form-row">
+                    <label>&nbsp;&nbsp;相机${i}密码</label>
+                    <input type="password" name="cam_pwd${i}" id="cam_pwd${i}" class="cam-input" placeholder="密码" maxlength="10" value="0">
+                </div>
+            </div>`;
+        }
+        
+        container.innerHTML = html;
+    }
+    
+    window.addEventListener('DOMContentLoaded',function(){generateCameraGroups();myFun()});
+    </script>
+
+	<hr>
+	<div class="center-button">
+        <input type="button" value="读取" style="width: 90px; height: 40px; background-color: orange; color: white; font-weight: bold;border: none;border-radius: 4px;cursor: pointer;" onclick="myFun();">
+        &nbsp&nbsp
+		<input type="submit" value="提交" style="width:80px; height:40px; background-color:orange; color:white; font-weight: bold;">
+	</div>
+    
+
+</form><hr>
+<form action="/preset.cgi" method="get" onsubmit='return checkCameraSelection(this) && validateCameraSelection(this) && confirm("是否移动预置位?")'>
+    <h3><strong>&nbsp;&nbsp;被控相机预置位移动调试</strong></h3>
+    <div class="form-count">
+        <label>&nbsp;&nbsp;预置点编号</label>
+        <div class="plc-input">
+            <input type="number" id="preset_num" name="preset_num" step="1" min="1" max="100" value="1" 
+                   placeholder="1~100" class="coord-input">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <label>&nbsp;&nbsp;选择相机</label>
+        <div style="display: flex; gap: 15px; margin-left: 10px;">
+            <label><input type="checkbox" name="cam1" value="1"> 相机1</label>
+            <label><input type="checkbox" name="cam2" value="1"> 相机2</label>
+            <label><input type="checkbox" name="cam3" value="1"> 相机3</label>
+            <label><input type="checkbox" name="cam4" value="1"> 相机4</label>
+            <label><input type="checkbox" name="cam5" value="1"> 相机5</label>
+        </div>
+    </div>
+
+    <hr>
+    <div class="center-button">
+        <input type="submit" value="移动" style="width:80px; height:40px; background-color:orange; color:white; font-weight: bold;">
+    </div>	
+</form>
+
+<form action="/move.cgi" method="get" onsubmit='return checkCameraSelection(this) && validateCameraSelection(this) && confirm("是否移动坐标?")'>
+    <h3><strong>&nbsp;&nbsp;被控相机坐标移动调试</strong></h3>
+    <div class="form-row">
+        <label>&nbsp;&nbsp;水平角度(Pan)</label>
+        <div class="plc-input">
+            <input type="number" id="pan" name="pan" step="0.1" min="-1" max="1" value="0" 
+                    placeholder="-1~1" class="coord-input">
+        </div>
+    </div>
+                
+    <div class="form-row">
+        <label>&nbsp;&nbsp;垂直角度(Tilt)</label>
+        <div class="plc-input">
+            <input type="number" id="tilt" name="tilt" step="0.1" min="-1" max="1" value="0" 
+                    placeholder="-1~1" class="coord-input">
+        </div>
+    </div>
+                
+    <div class="form-row">
+        <label>&nbsp;&nbsp;变焦级别(Zoom)</label>
+        <div class="plc-input">
+            <input type="number" id="zoom" name="zoom" step="0.1" min="0" max="1" value="1" 
+                    placeholder="0~1" class="coord-input">
+        </div>
+    </div>
+    
+    <div class="form-row">
+        <label>&nbsp;&nbsp;水平速度</label>
+        <div class="plc-input">
+            <input type="number" id="pan_speed" name="pan_speed" step="0.1" min="0" max="1" value="1" 
+                    placeholder="0~1" class="coord-input">
+        </div>
+    </div>
+    
+    <div class="form-row">
+        <label>&nbsp;&nbsp;垂直速度</label>
+        <div class="plc-input">
+            <input type="number" id="tilt_speed" name="tilt_speed" step="0.1" min="0" max="1" value="1" 
+                    placeholder="0~1" class="coord-input">
+        </div>
+    </div>
+    
+    <div class="form-row">
+        <label>&nbsp;&nbsp;变焦速度</label>
+        <div class="plc-input">
+            <input type="number" id="zoom_speed" name="zoom_speed" step="0.1" min="0" max="1" value="1" 
+                    placeholder="0~1" class="coord-input">
+        </div>
+    </div>
+    
+    <div class="form-row">
+        <label>&nbsp;&nbsp;选择相机</label>
+        <div style="display: flex; gap: 15px; margin-left: 10px;">
+            <label><input type="checkbox" name="cam1" value="1"> 相机1</label>
+            <label><input type="checkbox" name="cam2" value="1"> 相机2</label>
+            <label><input type="checkbox" name="cam3" value="1"> 相机3</label>
+            <label><input type="checkbox" name="cam4" value="1"> 相机4</label>
+            <label><input type="checkbox" name="cam5" value="1"> 相机5</label>
+        </div>
+    </div>
+    
+    <div class="center-button">
+        <input type="submit" value="移动" style="width:80px; height:40px; background-color:orange; color:white; font-weight: bold;">
+    </div>
+
+</form><hr>
+
+
+<form action="/reboot.cgi" enctype="text/plain" method="get">
+	<div class="center-button">
+		<input type="submit" style="width:80px; height:40px; background-color:orange; color:white; font-weight: bold;" onclick='return confirm("是否选择重启")' value="重启">
+	</div>
+</form><div class="footmsg">
+	© 天津市联大通讯发展有限公司
+</div>
+
+</div>
+</body>
+</html>
